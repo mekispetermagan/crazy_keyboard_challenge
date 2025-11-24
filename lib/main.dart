@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'game_logic.dart';
 import 'screens.dart';
 
-enum Status {title, game, result}
+enum Status {title, game, success, timeout, result}
 
 class _App extends StatelessWidget {
   const _App();
@@ -83,8 +83,9 @@ class _HomePageState extends State<HomePage>
         _typedText = "";
         return;
       }
-      if (input == "backspace" &&_typedText.isNotEmpty) {
-        _typedText = _typedText.substring(0, _typedText.length-1);
+      if (input == "backspace") {
+        if (_typedText.isNotEmpty)
+          {_typedText = _typedText.substring(0, _typedText.length-1);}
         return;
       }
       _typedText += input;
@@ -134,13 +135,16 @@ class _HomePageState extends State<HomePage>
             angle: _angle,
             onKeyPress: _onKeyPress,
           ),
+          Status.success || Status.timeout => GameScreen(
+            challengeText: _challengeText!,
+            typedText: _typedText,
+            angle: _angle,
+            onKeyPress: null,
+          ),
           Status.result => ResultScreen(),
         };
       },
     );
-
-
-
 
   }
 }

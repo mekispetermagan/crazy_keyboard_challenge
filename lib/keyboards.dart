@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import  'dart:math';
-import 'base_widgets.dart' show LetterButton;
+import 'positioned_widgets.dart';
 
 class CircleKeyboard {
   late final List<Widget> keys;
@@ -51,24 +51,16 @@ class CircleKeyboard {
       y: y0,
       onPressed: onKeyPress,
     ),
-    Positioned(
-      left: x0,
-      top: 2*y0-90,
-      child: IconButton(
-        onPressed: () => onKeyPress("reset"),
-        iconSize: 36,
-        icon: const Icon(Icons.restart_alt_rounded),
-      ),
+    BackspaceButton(
+      x: x0-30,
+      y: 2*y0-90,
+      onPressed: onKeyPress,
     ),
-    Positioned(
-      left: x0-60,
-      top: 2*y0-90,
-      child: IconButton(
-        onPressed: () => onKeyPress("backspace"),
-        iconSize: 36,
-        icon: const Icon(Icons.backspace_rounded),
-      ),
-    )
+    ResetButton(
+      x: x0+30,
+      y: 2*y0-90,
+      onPressed: onKeyPress,
+    ),
   ];
   }
 

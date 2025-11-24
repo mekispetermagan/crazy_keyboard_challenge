@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
 // import  'dart:math';
-import 'base_widgets.dart' show PrimaryActionButton, PositionedText;
+import 'positioned_widgets.dart';
 import 'package:typing/keyboards.dart';
+
+class PrimaryActionButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+
+  const PrimaryActionButton({
+    required this.text,
+    required this.onPressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return TextButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(colorScheme.primaryContainer),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimaryContainer),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Text(text, style: TextStyle(fontSize: 30)),
+      ),
+    );
+  }
+}
 
 class TitleScreen extends StatelessWidget {
   final VoidCallback? onStart;
@@ -45,7 +72,7 @@ class GameScreen extends StatelessWidget {
   final String challengeText;
   final String typedText;
   final double angle;
-  final void Function(String) onKeyPress;
+  final void Function(String)? onKeyPress;
   const GameScreen({
     required this.challengeText,
     required this.typedText,
@@ -84,12 +111,14 @@ class GameScreen extends StatelessWidget {
                       PositionedText(
                         text: challengeText,
                         x: x0,
-                        y: 0,
+                        y: 30,
+                        backgroundColor: Colors.green.shade900,
                       ),
                       PositionedText(
                         text: typedText,
                         x: x0,
-                        y: 60,
+                        y: 90,
+                        backgroundColor: Colors.blue.shade900,
                       ),
                     ...CircleKeyboard(
                       keySize: keySize,
@@ -98,6 +127,12 @@ class GameScreen extends StatelessWidget {
                       angle: angle,
                       onKeyPress: onKeyPress,
                     ).keys,
+                    LivesDisplay(
+                      lives: 3,
+                      maxLives: 5,
+                      x: width/4,
+                      y: height-30
+                    ),
                     ]
                   ),
                 ),
