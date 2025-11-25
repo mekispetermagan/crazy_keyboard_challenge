@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:typing/countdown_logic.dart';
 import 'dart:convert';
 import 'game_logic.dart';
 import 'screens.dart';
@@ -41,8 +42,13 @@ class _HomePageState extends State<HomePage>
   late final Ticker _ticker;
   late final Future<List<Map<String, dynamic>>> _dataFuture;
   TypingManager? _challengeManager;
+  final CountdownManager _countdownManager = CountdownManager(
+    totalSeconds: 60,
+    dangerZoneSeconds: 10,
+    );
   final double _angleSpeed = 6; // deg/s
   double _angle = 0;
+  int _tickerTimeMs = 0;
   String _typedText = "";
   String? _challengeText;
   int _score = 0;
@@ -68,12 +74,15 @@ class _HomePageState extends State<HomePage>
     _nextChallenge();
     setState((){
       _status = Status.game;
+      _countdownManager.start(_tickerTimeMs);
     });
   }
 
   void _onTick(Duration elapsed) {
     setState(() {
-    _angle = (elapsed.inMilliseconds / 1000 *_angleSpeed) % 360;
+      _tickerTimeMs = elapsed.inMilliseconds;
+      _angle = (_tickerTimeMs / 1000 *_angleSpeed) % 360;
+        _countdownManager.update(_tickerTimeMs);
     });
   }
 
@@ -104,6 +113,8 @@ class _HomePageState extends State<HomePage>
     setState((){
       _challengeText = _challengeManager!.createChallenge();
       _typedText = "";
+      _countdownManager.reset(_tickerTimeMs);
+      _countdownManager.start(_tickerTimeMs);
     });
   }
 
@@ -134,12 +145,14 @@ class _HomePageState extends State<HomePage>
             typedText: _typedText,
             angle: _angle,
             onKeyPress: _onKeyPress,
+            countdownStatus: _countdownManager.status,
           ),
           Status.success || Status.timeout => GameScreen(
             challengeText: _challengeText!,
             typedText: _typedText,
             angle: _angle,
             onKeyPress: null,
+            countdownStatus: _countdownManager.status,
           ),
           Status.result => ResultScreen(),
         };

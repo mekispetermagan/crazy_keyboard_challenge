@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:typing/countdown_logic.dart';
+import 'package:typing/countdown_widgets.dart';
 // import  'dart:math';
 import 'positioned_widgets.dart';
 import 'package:typing/keyboards.dart';
@@ -73,16 +75,19 @@ class GameScreen extends StatelessWidget {
   final String typedText;
   final double angle;
   final void Function(String)? onKeyPress;
+  final CountdownStatus countdownStatus;
   const GameScreen({
     required this.challengeText,
     required this.typedText,
     required this.angle,
     required this.onKeyPress,
+    required this.countdownStatus,
     super.key
     });
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text("Crazy Keyboard Challenge"),
@@ -112,27 +117,33 @@ class GameScreen extends StatelessWidget {
                         text: challengeText,
                         x: x0,
                         y: 30,
-                        backgroundColor: Colors.green.shade900,
+                        role:Role.secondary,
                       ),
                       PositionedText(
                         text: typedText,
                         x: x0,
                         y: 90,
-                        backgroundColor: Colors.blue.shade900,
+                        role: Role.error,
                       ),
-                    ...CircleKeyboard(
-                      keySize: keySize,
-                      x0: x0,
-                      y0: y0,
-                      angle: angle,
-                      onKeyPress: onKeyPress,
-                    ).keys,
-                    LivesDisplay(
-                      lives: 3,
-                      maxLives: 5,
-                      x: width/4,
-                      y: height-30
-                    ),
+                      ...CircleKeyboard(
+                        keySize: keySize,
+                        x0: x0,
+                        y0: y0,
+                        angle: angle,
+                        onKeyPress: onKeyPress,
+                      ).keys,
+                      LivesDisplay(
+                        lives: 3,
+                        maxLives: 5,
+                        x: width/4,
+                        y: height-30
+                      ),
+                      PositionedCountdownTimer(
+                        status: countdownStatus,
+                        baseSize: 30,
+                        x: width-72,
+                        y: height*0.8,
+                      ),
                     ]
                   ),
                 ),

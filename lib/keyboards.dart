@@ -8,7 +8,7 @@ class CircleKeyboard {
   final double x0;
   final double y0;
   final double angle;
-  final void Function(String) onKeyPress;
+  final void Function(String)? onKeyPress;
   CircleKeyboard({
     required this.keySize,
     required this.x0,
@@ -52,13 +52,13 @@ class CircleKeyboard {
       onPressed: onKeyPress,
     ),
     BackspaceButton(
-      x: x0-30,
-      y: 2*y0-90,
+      x: x0-90,
+      y: y0+210,
       onPressed: onKeyPress,
     ),
     ResetButton(
-      x: x0+30,
-      y: 2*y0-90,
+      x: x0-30,
+      y: y0+210,
       onPressed: onKeyPress,
     ),
   ];

@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:typing/countdown_logic.dart';
+import 'package:typing/countdown_widgets.dart';
 // import  'dart:math';
 
 /// Center-positioned widgets
+
+enum Role {
+  primary,
+  secondary,
+  tertiary,
+  error;
+
+  Color bg(ColorScheme c) => switch (this) {
+    Role.primary => c.primaryContainer,
+    Role.secondary => c.secondaryContainer,
+    Role.tertiary => c.tertiaryContainer,
+    Role.error => c.errorContainer,
+  };
+
+  Color fg(ColorScheme c) => switch (this) {
+    Role.primary => c.onPrimaryContainer,
+    Role.secondary => c.onSecondaryContainer,
+    Role.tertiary => c.onTertiaryContainer,
+    Role.error => c.onErrorContainer,
+  };
+}
 
 class CenterPositioned extends StatelessWidget {
   final double x;
@@ -32,7 +55,8 @@ class LetterButton extends StatelessWidget {
   final double size;
   final double x;
   final double y;
-  final void Function(String) onPressed;
+  final void Function(String)? onPressed;
+  final Role role;
 
   const LetterButton({
     required this.letter,
@@ -40,11 +64,14 @@ class LetterButton extends StatelessWidget {
     required this.x,
     required this.y,
     required this.onPressed,
+    this.role = Role.primary,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final op = onPressed;
     return CenterPositioned(
       x: x,
       y: y,
@@ -54,10 +81,10 @@ class LetterButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: TextButton(
-            onPressed: () => onPressed(letter),
+            onPressed: () => op != null ? op(letter) : null,
             style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primaryContainer),
-              foregroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.onPrimaryContainer),
+              backgroundColor: WidgetStatePropertyAll(role.bg(cs)),
+              foregroundColor: WidgetStatePropertyAll(role.fg(cs)),
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
@@ -82,7 +109,7 @@ class LetterButton extends StatelessWidget {
 class EditButton extends StatelessWidget {
   final double x;
   final double y;
-  final void Function(String) onPressed;
+  final void Function(String)? onPressed;
   final String editMessage;
   final Icon icon;
 
@@ -97,11 +124,12 @@ class EditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final op = onPressed;
     return CenterPositioned(
       x: x,
       y: y,
       child: IconButton(
-        onPressed: () => onPressed(editMessage),
+        onPressed: () => op != null ? op(editMessage) : null,
         iconSize: 36,
         icon: icon,
       ),
@@ -112,7 +140,7 @@ class EditButton extends StatelessWidget {
 class ResetButton extends StatelessWidget {
   final double x;
   final double y;
-  final void Function(String) onPressed;
+  final void Function(String)? onPressed;
 
   const ResetButton({
     required this.x,
@@ -136,7 +164,7 @@ class ResetButton extends StatelessWidget {
 class BackspaceButton extends StatelessWidget {
   final double x;
   final double y;
-  final void Function(String) onPressed;
+  final void Function(String)? onPressed;
 
   const BackspaceButton({
     required this.x,
@@ -161,22 +189,23 @@ class PositionedText extends StatelessWidget {
   final String text;
   final double x;
   final double y;
-  final Color? backgroundColor;
+  final Role role;
   const PositionedText({
     required this.text,
     required this.x,
     required this.y,
-    this.backgroundColor,
+    this.role = Role.primary,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return CenterPositioned(
       x: x,
       y: y,
       child: Card(
-        color: backgroundColor,
+        color: role.bg(cs),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
           child: Text(
@@ -184,7 +213,7 @@ class PositionedText extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
-              backgroundColor: backgroundColor,
+              color: role.fg(cs),
             ),
           ),
         ),
@@ -231,4 +260,29 @@ class LivesDisplay extends StatelessWidget {
     );
   }
 
+}
+
+class PositionedCountdownTimer extends StatelessWidget {
+  final CountdownStatus status;
+  final double baseSize;
+  final double x;
+  final double y;
+  const PositionedCountdownTimer({
+    required this.status,
+    required this.baseSize,
+    required this.x,
+    required this.y,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CenterPositioned(
+      x: x,
+      y: y,
+      child: CountdownTimer(
+        status: status,
+        baseSize: baseSize)
+    );
+  }
 }
