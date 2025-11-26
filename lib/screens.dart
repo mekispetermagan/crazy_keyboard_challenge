@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:typing/countdown_logic.dart';
-import 'package:typing/countdown_widgets.dart';
+// import 'package:typing/countdown_widgets.dart';
 // import  'dart:math';
 import 'positioned_widgets.dart';
 import 'package:typing/keyboards.dart';
@@ -47,7 +47,7 @@ class TitleScreen extends StatelessWidget {
           padding: EdgeInsets.all(24),
           child: SizedBox.expand(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
@@ -89,11 +89,11 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Crazy Keyboard Challenge"),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-      ),
+      // appBar: AppBar(
+      //   title: Text("Crazy Keyboard Challenge"),
+      //   backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      //   foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      // ),
       body: SafeArea(
         child: SizedBox(
           child: LayoutBuilder(
@@ -113,17 +113,19 @@ class GameScreen extends StatelessWidget {
                   width: width,
                   child: Stack(
                     children: <Widget>[
-                      PositionedText(
+                      PositionedTextCard(
                         text: challengeText,
                         x: x0,
-                        y: 30,
+                        y: 60,
                         role:Role.secondary,
+                        fontSize: 30,
                       ),
-                      PositionedText(
+                      PositionedTextCard(
                         text: typedText,
                         x: x0,
-                        y: 90,
-                        role: Role.error,
+                        y: 150,
+                        role: Role.tertiary,
+                        fontSize: 30,
                       ),
                       ...CircleKeyboard(
                         keySize: keySize,
@@ -132,17 +134,23 @@ class GameScreen extends StatelessWidget {
                         angle: angle,
                         onKeyPress: onKeyPress,
                       ).keys,
+                      PositionedCountdownTimer(
+                        status: countdownStatus,
+                        baseSize: 30,
+                        x: x0,
+                        y: height-150,
+                      ),
                       LivesDisplay(
                         lives: 3,
                         maxLives: 5,
                         x: width/4,
-                        y: height-30
+                        y: height-45,
                       ),
-                      PositionedCountdownTimer(
-                        status: countdownStatus,
-                        baseSize: 30,
-                        x: width-72,
-                        y: height*0.8,
+                      PositionedTextCard(
+                        text: "32544",
+                        x: width*3/4,
+                        y:height-45,
+                        role: Role.tertiary,
                       ),
                     ]
                   ),

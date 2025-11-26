@@ -185,16 +185,18 @@ class BackspaceButton extends StatelessWidget {
   }
 }
 
-class PositionedText extends StatelessWidget {
+class PositionedTextCard extends StatelessWidget {
   final String text;
   final double x;
   final double y;
   final Role role;
-  const PositionedText({
+  final double fontSize;
+  const PositionedTextCard({
     required this.text,
     required this.x,
     required this.y,
     this.role = Role.primary,
+    this.fontSize = 24,
     super.key,
   });
 
@@ -207,12 +209,12 @@ class PositionedText extends StatelessWidget {
       child: Card(
         color: role.bg(cs),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 18),
           child: Text(
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: fontSize,
               color: role.fg(cs),
             ),
           ),

@@ -52,13 +52,13 @@ class CircleKeyboard {
       onPressed: onKeyPress,
     ),
     BackspaceButton(
-      x: x0-90,
-      y: y0+210,
+      x: 2*x0-60,
+      y: y0-180,
       onPressed: onKeyPress,
     ),
     ResetButton(
-      x: x0-30,
-      y: y0+210,
+      x: 2*x0-105,
+      y: y0-180,
       onPressed: onKeyPress,
     ),
   ];
