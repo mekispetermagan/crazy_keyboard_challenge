@@ -105,6 +105,89 @@ class CircleKeyboard {
         )
     ];
   }
-
-
 }
+
+class MarqueeKeyboard {
+  late final List<Widget> keys;
+  final double keySize;
+  final double x0;
+  final double y0;
+  final double angle;
+  final void Function(String)? onKeyPress;
+  MarqueeKeyboard({
+    required this.keySize,
+    required this.x0,
+    required this.y0,
+    required this.angle,
+    required this.onKeyPress,
+  }) {
+    keys = [
+    ..._buttonRow(
+      letters: "QWERTYUIOP",
+      size: keySize,
+      x0: x0,
+      y0: y0-2.25*keySize,
+      startAngle: angle,
+      clockwise: true
+    ),
+    ..._buttonRow(
+      letters: "ASDFGHJKL",
+      size: keySize,
+      x0: x0,
+      y0: y0-0.75*keySize,
+      startAngle: angle,
+      clockwise: false
+    ),
+      ..._buttonRow(
+      letters: "ZXCVBNM",
+      size: keySize,
+      x0: x0,
+      y0: y0+0.75*keySize,
+      startAngle: angle,
+      clockwise: true
+    ),
+    SpaceButton(
+      size: keySize,
+      x: x0,
+      y: y0+2.25*keySize,
+      onPressed: onKeyPress,
+    ),
+    BackspaceButton(
+      x: x0+3*keySize,
+      y: y0+2.25*keySize,
+      onPressed: onKeyPress,
+    ),
+    ResetButton(
+      x: x0-3*keySize,
+      y: y0+2.25*keySize,
+      onPressed: onKeyPress,
+    ),
+  ];
+  }
+
+  List<LetterButton> _buttonRow({
+    required String letters,
+    required double size,
+    required double x0,
+    required double y0,
+    required double startAngle,
+    bool clockwise = true,
+  }) {
+
+    if (letters.isEmpty) return [...[]];
+    return [
+      for (int i=0; i<letters.length; i++)
+        LetterButton(
+          letter: letters[i],
+          size: size,
+          x: clockwise
+            ? (x0 - letters.length/2*keySize + i*keySize +4*angle) % (2*x0+size)
+            : (x0 - letters.length/2*keySize + i*keySize -4*angle) % (2*x0+size)
+            ,
+          y: y0,
+          onPressed: onKeyPress,
+        )
+    ];
+  }
+}
+

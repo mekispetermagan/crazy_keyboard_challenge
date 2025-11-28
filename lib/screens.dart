@@ -102,7 +102,6 @@ class GameScreen extends StatelessWidget {
 
               final width = constraints.maxWidth ;
               final height = constraints.maxHeight;
-
               final double keySize = 42;
 
               final double x0 = width / 2;
@@ -127,7 +126,7 @@ class GameScreen extends StatelessWidget {
                         role: Role.tertiary,
                         fontSize: 30,
                       ),
-                      ...CircleKeyboard(
+                      ...MarqueeKeyboard(
                         keySize: keySize,
                         x0: x0,
                         y0: y0,

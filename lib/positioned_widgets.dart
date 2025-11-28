@@ -57,6 +57,7 @@ class LetterButton extends StatelessWidget {
   final double y;
   final void Function(String)? onPressed;
   final Role role;
+  final bool isWide;
 
   const LetterButton({
     required this.letter,
@@ -65,6 +66,7 @@ class LetterButton extends StatelessWidget {
     required this.y,
     required this.onPressed,
     this.role = Role.primary,
+    this.isWide = false,
     super.key,
   });
 
@@ -76,7 +78,7 @@ class LetterButton extends StatelessWidget {
       x: x,
       y: y,
       child: SizedBox(
-        width: size,
+        width: isWide ? 3*size : size,
         height: size,
         child: Padding(
           padding: const EdgeInsets.all(3.0),
@@ -97,6 +99,7 @@ class LetterButton extends StatelessWidget {
               letter,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontSize: size/3,
               ),
               ),
             ),
@@ -157,6 +160,33 @@ class ResetButton extends StatelessWidget {
       onPressed: onPressed,
       editMessage: "reset",
       icon: Icon(Icons.restart_alt_rounded),
+    );
+  }
+}
+
+class SpaceButton extends StatelessWidget {
+  final double x;
+  final double y;
+  final double size;
+  final void Function(String)? onPressed;
+
+  const SpaceButton({
+    required this.x,
+    required this.y,
+    required this.size,
+    required this.onPressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LetterButton(
+      x: x,
+      y: y,
+      size: size,
+      onPressed: onPressed,
+      letter: " ",
+      isWide: true,
     );
   }
 }
